@@ -54,7 +54,7 @@ def build_model():
         ('vect', CountVectorizer(tokenizer=tokenize)),
         ('tfidf', TfidfTransformer()),
 
-        ('clf', MultiOutputClassifier(RandomForestClassifier()))
+        ('clf', MultiOutputClassifier(RandomForestClassifier(n_estimators=100)))
     ])
     
     parameters = {
@@ -65,8 +65,8 @@ def build_model():
         'clf__estimator__min_samples_split': [3, 4]
     }
 
-    cv = GridSearchCV(pipeline, param_grid=parameters,cv=3)
-    return cv
+    grid = GridSearchCV(pipeline, param_grid=parameters,cv=3)
+    return grid
 
 
 def evaluate_model(model, X_test, Y_test, category_names):

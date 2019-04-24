@@ -27,10 +27,38 @@ def tokenize(text):
 
 # load data
 engine = create_engine('sqlite:///../data/DisasterResponse.db')
-df = pd.read_sql_table('YourTableName', engine)
+df = pd.read_sql_table('DisasterResponse', engine)
 
 # load model
 model = joblib.load("../models/classifier.pkl")
+
+def graph_data(label_names,label_data,xName,title):
+    # create visuals
+    graphs = [
+        {
+            'data': [
+                Bar(
+                    x=label_names,
+                    y=label_data
+                )
+            ],
+
+            'layout': {
+                'title': title,
+                'yaxis': {
+                    'title': 'Count'
+                },
+                'xaxis': {
+                    'title': xName
+                }
+            }
+        }
+    ]
+    
+    # encode plotly graphs in JSON
+    ids = [xName+"graph-{}".format(i) for i, _ in enumerate(graphs)]
+    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+    return ids,graphJSON
 
 
 # index webpage displays cool visuals and receives user input text for model
@@ -38,40 +66,28 @@ model = joblib.load("../models/classifier.pkl")
 @app.route('/index')
 def index():
     
-    # extract data needed for visuals
-    # TODO: Below is an example - modify to extract data for your own visuals
+    # genre distribution
     genre_counts = df.groupby('genre').count()['message']
     genre_names = list(genre_counts.index)
-    
-    # create visuals
-    # TODO: Below is an example - modify to create your own visuals
-    graphs = [
-        {
-            'data': [
-                Bar(
-                    x=genre_names,
-                    y=genre_counts
-                )
-            ],
+    genre_ids,genre_graphJSON = graph_data(genre_names,genre_counts,xName='Genre',title='Distribution of Message Genres')
 
-            'layout': {
-                'title': 'Distribution of Message Genres',
-                'yaxis': {
-                    'title': "Count"
-                },
-                'xaxis': {
-                    'title': "Genre"
-                }
-            }
-        }
-    ]
-    
-    # encode plotly graphs in JSON
-    ids = ["graph-{}".format(i) for i, _ in enumerate(graphs)]
-    graphJSON = json.dumps(graphs, cls=plotly.utils.PlotlyJSONEncoder)
+
+    # extract data needed for visuals
+    label_names = ['related', 'request', 'offer',
+       'aid_related', 'medical_help', 'medical_products', 'search_and_rescue',
+       'security', 'military', 'child_alone', 'water', 'food', 'shelter',
+       'clothing', 'money', 'missing_people', 'refugees', 'death', 'other_aid',
+       'infrastructure_related', 'transport', 'buildings', 'electricity',
+       'tools', 'hospitals', 'shops', 'aid_centers', 'other_infrastructure',
+       'weather_related', 'floods', 'storm', 'fire', 'earthquake', 'cold',
+       'other_weather', 'direct_report']
+
+    label_data = df[label_names].sum().tolist()
+    # labels 
+    ids,graphJSON = graph_data(label_names,label_data,xName='Labels',title='Distribution of Labels')
     
     # render web page with plotly graphs
-    return render_template('master.html', ids=ids, graphJSON=graphJSON)
+    return render_template('master.html', genre_ids=genre_ids, genre_graphJSON=genre_graphJSON, ids=ids, graphJSON=graphJSON)
 
 
 # web page that handles user query and displays model results
