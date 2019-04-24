@@ -32,7 +32,7 @@ pip install jupyter
 
 
 # Acknowledgements
-Thanks to Udacity(https://udacity.com).I have followed the of machine learning pipeline courses(ud025).This is one of project of the Data Scientist Nanodegree.
+Thanks to Udacity(https://udacity.com ).I have followed the of machine learning pipeline courses(ud025).This is one of project of the Data Scientist Nanodegree.
 
 
 # License
