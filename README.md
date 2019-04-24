@@ -16,8 +16,13 @@ pip install plotly
 pip install jupyter 
 ```
 
+### Contents
+app/run.py                 -- Render a website to view model data.
+models/train_classifier.py -- Train a multiple classifier model
+data/process_data.py       -- Load and clean data
 
-### Instructions:
+
+### Instructions
 1. Run the following commands in the project's root directory to set up your database and model.
 
     - To run ETL pipeline that cleans data and stores in database
