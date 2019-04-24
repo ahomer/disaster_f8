@@ -17,8 +17,8 @@ pip install jupyter
 ```
 
 ### Contents
-app/run.py                 -- Render a website to view model data.
-models/train_classifier.py -- Train a multiple classifier model
+app/run.py                 -- Render a website to view model data <br>
+models/train_classifier.py -- Train a multiple classifier model <br>
 data/process_data.py       -- Load and clean data
 
 
